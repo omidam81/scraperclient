@@ -1,0 +1,121 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" routerLink="/home" style="font-weight: bold">Scraper</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" routerLink="/home">Home <span class="sr-only">Home</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/setting">Setting</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/userSetting">User Setting</a>
+      </li>
+    </ul>
+    <!--<div class="form-inline my-2 my-lg-0">-->
+
+    <!--<a data-toggle="modal" data-target="#changePassModal">-->
+    <!--<i class="fa fa-lock text-primary"></i>-->
+    <!--</a>-->
+    <!--&#160;&#160;-->
+    <!--<button class="btn btn-outline-primary my-2 my-sm-0" type="submit">-->
+    <!--<i class="fa fa-sign-out"></i> &#160; Log-Out-->
+    <!--</button>-->
+
+    <!--</div>-->
+    <div class="btn-group">
+      <button type="button" class="btn setting-btn dropdown-toggle " data-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false">
+        <i class="fa fa-cog"></i>
+      </button>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" data-toggle="modal" data-target="#changePassModal"> <i class="fa fa-lock icon-setting"></i> Change Password</a>
+        <a class="dropdown-item"> <i class="fa fa-power-off"></i> Log out</a>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+
+<!--user modal-->
+<div
+  class="modal fade"
+  id="changePassModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-sh" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Change Password</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+          id="closebtn"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="col-md-12 mb-2">
+            <label>Old Password</label>
+            <input
+              type="password"
+              class="form-control"
+              [(ngModel)]="oldPass"
+              name="email"
+              required
+            />
+          </div>
+        </div>
+        <div class="form-row" *ngIf="!edit">
+          <div class="col-md-12 mb-2">
+            <label>New Password</label>
+            <input
+              type="password"
+              class="form-control"
+              [(ngModel)]="newPass"
+              name="password"
+              required
+            />
+          </div>
+          <div class="col-md-12 mb-2">
+            <label>Confirm New Password</label>
+            <input
+              type="password"
+              class="form-control"
+              [(ngModel)]="confirmPass"
+              name="confirm password"
+              required
+            />
+          </div>
+
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-primary mr-auto"
+          (click)="changePass()"
+        >
+          Save
+        </button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

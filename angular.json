@@ -1,0 +1,167 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "scraping": {
+      "root": "",
+      "sourceRoot": "src",
+      "projectType": "application",
+      "prefix": "app",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/scraping",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "src/tsconfig.app.json",
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
+            "styles": [
+              "src/styles.css",
+              "src/assets/css/bootstrap.css",
+              "src/assets/css/alertify.css",
+              "src/assets/css/default.min.css",
+              "src/assets/font-awesome/css/font-awesome.min.css",
+              "./node_modules/ng-pick-datetime/assets/style/picker.min.css",
+              "./src/assets/jqx.base.css",
+              "./src/assets/jqx.material.css",
+              "./src/assets/jqx.dark.css",
+
+              "./src/assets/jqx.metrodark.css"
+
+            ],
+            "scripts": [
+              "src/assets/js/jquery-3.2.1.js",
+              "src/assets/js/bootstrap.bundle.js",
+              "src/assets/js/alertify.js",
+              "src/assets/js/select2.js",
+              "src/assets/js/main.js",
+              "./src/assets/jqxcore.js",
+              "./src/assets/jqxdata.js",
+              "./src/assets/jqxbuttons.js",
+              "./src/assets/jqxscrollbar.js",
+              "./src/assets/jqxmenu.js",
+              "./src/assets/jqxcheckbox.js",
+              "./src/assets/jqxlistbox.js",
+              "./src/assets/jqxdropdownlist.js",
+              "./src/assets/jqxgrid.js",
+              "./src/assets/jqxgrid.sort.js",
+              "./src/assets/jqxgrid.pager.js",
+              "./src/assets/jqxgrid.selection.js",
+              "./src/assets/jqxgrid.edit.js",
+              "./src/assets/jqxgrid.columnsresize.js",
+              "./src/assets/jqxgrid.filter.js"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "scraping:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "scraping:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "scraping:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "src/test.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "src/tsconfig.spec.json",
+            "karmaConfig": "src/karma.conf.js",
+            "styles": [
+              "src/styles.css"
+            ],
+            "scripts": [],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "src/tsconfig.app.json",
+              "src/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "scraping-e2e": {
+      "root": "e2e/",
+      "projectType": "application",
+      "prefix": "",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "e2e/protractor.conf.js",
+            "devServerTarget": "scraping:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "scraping:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "e2e/tsconfig.e2e.json",
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "scraping"
+}

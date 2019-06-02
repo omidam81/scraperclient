@@ -1,0 +1,27 @@
+.fa-cog {
+  padding-right: 9px;
+  font-size: 15px;
+  position: relative;
+  bottom: 2px;
+  font-size: 15px;
+}
+
+.setting-btn {
+  background-color: #d41872;
+  color: white;
+}
+
+.dropdown-menu {
+  right: 0px !important;
+  left: initial;
+}
+
+.dropdown-menu a:hover {
+  cursor: pointer;
+}
+
+.icon-setting {
+  padding-right: 5px;
+  font-size: 13px;
+  color: #d41872;
+}

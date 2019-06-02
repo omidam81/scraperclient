@@ -1,0 +1,80 @@
+<div class="container">
+  <div class="customBox">
+    <h4>Search</h4>
+    <hr>
+    <div class="form-row mt-5">
+      <div class="col-md-5">
+        <label>
+          Site
+        </label>
+        <br>
+        <select2 value="selectedSite" [data]="siteList" [options]="options" [cssImport]="true"></select2>
+      </div>
+      <div class="col-md"></div>
+    </div>
+    <div class="form-row mt-5">
+      <div class="col-md-5">
+        <label>
+          Origin
+        </label>
+        <br>
+        <select2 value="" [data]="portList" [options]="optionsOrigin" [cssImport]="true"
+                 (valueChanged)="changedOrigin($event)"></select2>
+      </div>
+      <div class="col-md-1"></div>
+      <div class="col-md-5">
+        <label>
+          Destination
+        </label>
+        <br>
+        <select2 value="selectedSite" [data]="portList" [options]="optionsdes" [cssImport]="true"
+                 (valueChanged)="changedDestination($event)"></select2>
+      </div>
+    </div>
+    <div class="form-row mt-5">
+      <div class="col-md-5">
+        <label>
+          From Date
+        </label>
+        <br>
+        <input class="form-control" [owlDateTime]="dt1" [owlDateTimeTrigger]="dt1" placeholder="Date Time"
+               [(ngModel)]="scrapReport.fromTime">
+        <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+      </div>
+      <div class="col-md-1"></div>
+      <div class="col-md-5">
+        <label>
+          To Date
+        </label>
+        <br>
+        <input class="form-control" [owlDateTime]="dt2" [owlDateTimeTrigger]="dt2" placeholder="Date Time"
+               [(ngModel)]="scrapReport.toTime">
+        <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+      </div>
+    </div>
+    <div class="row mt-5">
+      <div class="col">
+        <button class="btn btn-primary mr-auto" (click)="search()">
+          <i class="fa fa-search"></i>
+          Search
+        </button>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col">
+        <div class="card">
+          <div class="card-header text-center">
+            <h4>Result</h4>
+          </div>
+          <div class="card-body">
+            <div id="list"></div>
+
+          </div>
+          <div class="card-footer">
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
