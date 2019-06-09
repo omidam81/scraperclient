@@ -6,6 +6,6 @@ import { Injectable } from '@angular/core';
 export default class Global {
 
   constructor() { }
-  // url = 'http://localhost:411/';
-  url = 'http://192.168.1.29:411/';
+  url = 'http://localhost:411/';
+  // url = 'http://192.168.1.29:411/';
 }

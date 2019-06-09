@@ -11,10 +11,10 @@
         <a class="nav-link" routerLink="/home">Home <span class="sr-only">Home</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/setting">Setting</a>
+        <a class="nav-link" routerLink="/setting" *ngIf="type === 'U77lk' || type === 'U54ji'">Setting</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/userSetting">User Setting</a>
+        <a class="nav-link" routerLink="/userSetting" *ngIf="type === 'U54ji'">User Setting</a>
       </li>
     </ul>
     <!--<div class="form-inline my-2 my-lg-0">-->
@@ -35,7 +35,7 @@
       </button>
       <div class="dropdown-menu">
         <a class="dropdown-item" data-toggle="modal" data-target="#changePassModal"> <i class="fa fa-lock icon-setting"></i> Change Password</a>
-        <a class="dropdown-item"> <i class="fa fa-power-off"></i> Log out</a>
+        <a class="dropdown-item" (click)="logOut()"> <i class="fa fa-power-off"></i> Log out</a>
       </div>
     </div>
 

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Select2OptionData} from 'ng2-select2';
 import {SelectorService} from '../_services/selector.service';
-import {SiteSetting, PortToPort,SystemEmail} from '../model/setting';
+import {SiteSetting, PortToPort, SystemEmail} from '../model/setting';
 import {CreatorService} from '../_services/creator.service';
 import {subscribeTo} from 'rxjs/internal-compatibility';
 import {promise} from 'selenium-webdriver';
@@ -38,11 +38,12 @@ export class SettingComponent implements OnInit {
   dayOfWeek = '1';
   dayOfMonth = '1';
   dayLength;
-  emailSetting:SystemEmail;
+  emailSetting: SystemEmail;
   emailList;
   ReportTime;
   masterEmailId;
   systemEmailId = -1;
+
   constructor(private selectorService: SelectorService, private creatorService: CreatorService) {
     this.weekNumber = Array(7).fill(0).map((x, i) => i + 1);
     this.monthNumber = Array(30).fill(0).map((x, i) => i + 1);
@@ -82,12 +83,12 @@ export class SettingComponent implements OnInit {
     this.selectedSite = id;
     this.selectorService.loadSetting(id).subscribe(data => {
       if (data['data'][0]) {
-        let siteSetting = data['data'][0]
+        let siteSetting = data['data'][0];
         this.hasSetting = true;
         this.scrapType = siteSetting['Schedule'].toString();
         this.dayOfWeek = siteSetting['DayMounth'];
         this.dayLength = siteSetting['LenghtScrap'];
-        this.scrapTime = siteSetting['Time']
+        this.scrapTime = siteSetting['Time'];
         this.loadPortToPort();
       } else {
         this.hasSetting = false;
@@ -132,14 +133,15 @@ export class SettingComponent implements OnInit {
     siteModel.String = this.convertToSchduleFormat(new Date(this.scrapTime));
     siteModel.TypeSchedule = this.scrapType;
     siteModel.DayOfMounth = this.setDayOf();
-    siteModel.LenghtToScraping= this.dayLength;
+    siteModel.LenghtToScraping = this.dayLength;
     this.creatorService.saveSetting(siteModel).subscribe(data => {
       alertify.success('Success');
     }, err => {
       alertify.error('error');
     });
   }
-  setDayOf(){
+
+  setDayOf() {
     switch (this.scrapType) {
       case '1':
         return 0;
@@ -149,8 +151,9 @@ export class SettingComponent implements OnInit {
         return this.dayOfMonth;
     }
   }
-  convertToSchduleFormat(time: Date , type = 1) {
-    if(type = 2){
+
+  convertToSchduleFormat(time: Date, type = 1) {
+    if (type = 2) {
       return `${time.getSeconds()} ${time.getMinutes()} ${time.getHours()} * * *`;
     }
     if (this.scrapType === '1') {
@@ -201,7 +204,12 @@ export class SettingComponent implements OnInit {
   }
 
   RemovePortToPort(id) {
-
+    this.creatorService.deletePortToPort(id).subscribe(data => {
+      alertify.success('success');
+          this.loadPortToPort();
+    }, err => {
+      alertify.error('error');
+    });
   }
 
   setDayValue(e) {
@@ -215,80 +223,86 @@ export class SettingComponent implements OnInit {
       this.dayLength = 30;
     }
   }
-  saveEmailSetting(){
+
+  saveEmailSetting() {
     //save Time
-    this.creatorService.saveEmailSetting(this.masterEmailId,this.ReportTime, this.convertToSchduleFormat(this.ReportTime,2)).subscribe(data=>{
-      try{
+    this.creatorService.saveEmailSetting(this.masterEmailId, this.ReportTime, this.convertToSchduleFormat(this.ReportTime, 2)).subscribe(data => {
+      try {
         this.masterEmailId = data['data'][0]['PkEmailSeting'];
-      }catch (e) {
-        alertify.error('error save time')
+      } catch (e) {
+        alertify.error('error save time');
       }
-    },err=>{
-      alertify.error('error')
-    })
+    }, err => {
+      alertify.error('error');
+    });
 
     //save Config
-    this.creatorService.saveSysyemEmail(this.emailSetting).subscribe(data=>{
+    this.creatorService.saveSysyemEmail(this.emailSetting).subscribe(data => {
       try {
-        if(data['data'][0]['message'] ==='succeed'){
-          alertify.success('success')
+        if (data['data'][0]['message'] === 'succeed') {
+          alertify.success('success');
         }
-      }catch (e) {
-        alertify.error('error')
+      } catch (e) {
+        alertify.error('error');
       }
 
-    },err=>{
-      alertify.error('error')
-    })
+    }, err => {
+      alertify.error('error');
+    });
   }
-  loadEmailSetting(){
-    this.creatorService.loadSystemEmail(-1).subscribe(data=>{
-      this.emailSetting.password = data['data'][0]['FldPass']
-      this.emailSetting.username = data['data'][0]['FldUserName']
-      this.emailSetting.email = data['data'][0]['FldEmail']
-      this.emailSetting.port = data['data'][0]['FldPort']
-      this.emailSetting.server = data['data'][0]['FldServer']
+
+  loadEmailSetting() {
+    this.creatorService.loadSystemEmail(-1).subscribe(data => {
+      this.emailSetting.password = data['data'][0]['FldPass'];
+      this.emailSetting.username = data['data'][0]['FldUserName'];
+      this.emailSetting.email = data['data'][0]['FldEmail'];
+      this.emailSetting.port = data['data'][0]['FldPort'];
+      this.emailSetting.server = data['data'][0]['FldServer'];
       this.systemEmailId = data['data'][0]['FldPkSystemEmail'];
-    },err=>{
+    }, err => {
       console.log('error fetching data');
-    })
+    });
   }
-  addEmailToList(){
-      this.creatorService.addEmail(this.masterEmailId,this.email).subscribe(data=>{
 
-        alertify.success('success');
-        this.loadEmailList();
-      },err=>{
-        alertify.error('error');
-      })
-  }
-  loadEmailList(){
-    this.selectorService.loadEmailList(1).subscribe(data=>{
-     this.emailList = data['data'];
+  addEmailToList() {
+    this.creatorService.addEmail(this.masterEmailId, this.email).subscribe(data => {
 
-    },err=>{
-      alertify.error('error fetching data')
-    })
-  }
-   loadMasterEmailSetting(){
-      this.selectorService.loadMasterEmailSetting().subscribe(data=>{
-        if(data['data'].length == 0){
-          this.masterEmailId = -1
-        }else{
-          this.masterEmailId = data['data'][0]['PkId'];
-          this.ReportTime = data['data']['0']['FldSendTime'];
-        }
-      },err=>{
-        alertify.error('error fetching data');
-      })
-
-  }
-  deleteEmail(id){
-    this.creatorService.deleteEmail(id).subscribe(data=>{
       alertify.success('success');
       this.loadEmailList();
-    },err=>{
+    }, err => {
       alertify.error('error');
-    })
+    });
+  }
+
+  loadEmailList() {
+    this.selectorService.loadEmailList(1).subscribe(data => {
+      this.emailList = data['data'];
+
+    }, err => {
+      alertify.error('error fetching data');
+    });
+  }
+
+  loadMasterEmailSetting() {
+    this.selectorService.loadMasterEmailSetting().subscribe(data => {
+      if (data['data'].length == 0) {
+        this.masterEmailId = -1;
+      } else {
+        this.masterEmailId = data['data'][0]['PkId'];
+        this.ReportTime = data['data']['0']['FldSendTime'];
+      }
+    }, err => {
+      alertify.error('error fetching data');
+    });
+
+  }
+
+  deleteEmail(id) {
+    this.creatorService.deleteEmail(id).subscribe(data => {
+      alertify.success('success');
+      this.loadEmailList();
+    }, err => {
+      alertify.error('error');
+    });
   }
 }

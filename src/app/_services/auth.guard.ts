@@ -17,3 +17,36 @@ export class AuthGuard implements CanActivate {
     return false;
   }
 }
+@Injectable()
+export class adminGuard implements CanActivate {
+
+  constructor(private router: Router) { }
+
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    if (localStorage.getItem('token') && localStorage.getItem('type') === 'U54ji') {
+      // logged in so return true
+      return true;
+    }
+
+    // not logged in so redirect to login page with the return url
+    this.router.navigate(['/'], { queryParams: { returnUrl: state.url }});
+    return false;
+  }
+}
+
+@Injectable()
+export class powerUserGuard implements CanActivate {
+
+  constructor(private router: Router) { }
+
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    if (localStorage.getItem('token') && (localStorage.getItem('type') === 'U54ji' || localStorage.getItem('type') === 'U77lk' ) ) {
+      // logged in so return true
+      return true;
+    }
+
+    // not logged in so redirect to login page with the return url
+    this.router.navigate(['/'], { queryParams: { returnUrl: state.url }});
+    return false;
+  }
+}

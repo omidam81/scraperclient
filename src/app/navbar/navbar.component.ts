@@ -3,6 +3,7 @@ import {CreatorService} from '../_services/creator.service';
 
 declare const alertify: any;
 import * as sha256 from '../../../node_modules/sha256/lib/sha256.js';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -13,11 +14,12 @@ export class NavbarComponent implements OnInit {
   newPass;
   oldPass;
   confirmPass;
-
-  constructor(private creatorService: CreatorService) {
+  type;
+  constructor(private creatorService: CreatorService,private router:Router) {
   }
 
   ngOnInit() {
+    this.type = localStorage.getItem('type');
   }
 
   changePass() {
@@ -46,6 +48,11 @@ export class NavbarComponent implements OnInit {
     }, err => {
       alertify.error('Error');
     });
+
+  }
+  logOut(){
+    localStorage.setItem('token','');
+    this.router.navigate(['/']);
 
   }
 

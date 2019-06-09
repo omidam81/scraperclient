@@ -13,10 +13,10 @@ export class AppComponent {
   constructor(private router:Router){
     router.events.subscribe(val => {
       this.showheather =
-        this.router.url === '/'
+        this.router.url === '/' || this.router.url.startsWith('/?')
           ? false
           : true;
-      this.showfooter = this.router.url === '/'
+      this.showfooter = this.router.url === '/' || this.router.url.startsWith('/?')
         ? false
         : true;
     });

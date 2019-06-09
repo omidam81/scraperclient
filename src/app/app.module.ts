@@ -7,7 +7,7 @@ import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import {LoaderInterceptor} from './_services/httpinterceptor.service';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {AuthGuard} from './_services/auth.guard';
+import {adminGuard, AuthGuard, powerUserGuard} from './_services/auth.guard';
 import {Select2Module} from 'ng2-select2';
 import {FormsModule} from '@angular/forms';
 import { SettingComponent } from './setting/setting.component';
@@ -42,6 +42,8 @@ import { UserSettingComponent } from './user-setting/user-setting.component';
   ],
   providers: [
     AuthGuard,
+    adminGuard,
+    powerUserGuard,
     {
     provide: HTTP_INTERCEPTORS,
     useClass: LoaderInterceptor,
