@@ -1,7 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {Select2OptionData} from 'ng2-select2';
-import {SelectorService} from '../_services/selector.service';
-import {ScrapReport} from '../model/setting';
+import { Component, OnInit } from '@angular/core';
+import { Select2OptionData } from 'ng2-select2';
+import { SelectorService } from '../_services/selector.service';
+import { ScrapReport } from '../model/setting';
+
+declare const alertify: any;
 
 @Component({
   selector: 'app-home',
@@ -25,11 +27,12 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    this.siteList = [{
-      id: '1',
-      text: 'One-lind.com'
-    }];
+    this.siteList = [
+      {
+        id: '1',
+        text: 'One-lind.com'
+      }
+    ];
     this.options = {
       placeholder: 'Select Site...',
       width: '100%'
@@ -39,16 +42,15 @@ export class HomeComponent implements OnInit {
       width: '100%'
     };
     this.optionsdes = {
-
       placeholder: 'Select Site...',
       width: '100%'
     };
-    this.selectorService.loadPorts(-1).subscribe(data => {
-      this.portList = data['data'];
-    }, err => {
-
-    });
-
+    this.selectorService.loadPorts(-1).subscribe(
+      data => {
+        this.portList = data['data'];
+      },
+      err => {}
+    );
   }
 
   changedOrigin(e) {
@@ -60,38 +62,43 @@ export class HomeComponent implements OnInit {
   }
 
   search() {
-    this.selectorService.loadScrapReport(this.scrapReport).subscribe(data => {
-      console.log(data);
-      var datalist: any = data;
-      if (datalist.msg === 'success') {
-        this.list = datalist.data;
-        var source =
-          {
+    if (this.scrapReport.fromTime == undefined) {
+      alertify.error('Select From Date');
+      return;
+    }
+    if (this.scrapReport.toTime == undefined) {
+      alertify.error('Select To Date');
+      return;
+    }
+
+    this.selectorService.loadScrapReport(this.scrapReport).subscribe(
+      data => {
+        console.log(data);
+        var datalist: any = data;
+        if (datalist.msg === 'success') {
+          this.list = datalist.data;
+          var source = {
             localdata: this.list,
-            datafields:
-              [
-                {name: 'FldArrivalDate', type: 'date'},
-                {name: 'FldDepDate', type: 'date'},
-                {name: 'FldInlandTime', type: 'date'},
-                {name: 'FldPortTime', type: 'date'},
-                {name: 'FldFkFromPort', type: 'number'},
-                {name: 'FldFkMasterRoute', type: 'number'},
-                {name: 'FldPkRoute', type: 'number'},
-                {name: 'FldFkToPort', type: 'number'},
-                {name: 'FldFkFromPort', type: 'number'},
-                {name: 'FldFrom', type: 'string'},
-                {name: 'FldOcean', type: 'string'},
-                {name: 'FldTo', type: 'string'},
-                {name: 'FldTotal', type: 'string'},
-                {name: 'FldVessel', type: 'string'},
-
-
-              ],
+            datafields: [
+              { name: 'FldArrivalDate', type: 'date' },
+              { name: 'FldDepDate', type: 'date' },
+              { name: 'FldInlandTime', type: 'date' },
+              { name: 'FldPortTime', type: 'date' },
+              { name: 'FldFkFromPort', type: 'number' },
+              { name: 'FldFkMasterRoute', type: 'number' },
+              { name: 'FldPkRoute', type: 'number' },
+              { name: 'FldFkToPort', type: 'number' },
+              { name: 'FldFkFromPort', type: 'number' },
+              { name: 'FldFrom', type: 'string' },
+              { name: 'FldOcean', type: 'string' },
+              { name: 'FldTo', type: 'string' },
+              { name: 'FldTotal', type: 'string' },
+              { name: 'FldVessel', type: 'string' }
+            ],
             datatype: 'array'
           };
-        let mythis = this;
-        ($('#list') as any).jqxGrid(
-          {
+          let mythis = this;
+          ($('#list') as any).jqxGrid({
             width: '100%',
             source: source,
             sortable: true,
@@ -100,37 +107,65 @@ export class HomeComponent implements OnInit {
             pagermode: 'simple',
             autoheight: true,
             columnsresize: true,
-            ready: function () {
-            },
+            ready: function() {},
             columns: [
               {
-                text: '#', sortable: false, filterable: false, editable: false,
-                groupable: false, draggable: false, resizable: false,
-                datafield: '', columntype: 'number', width: '5%',
-                cellsrenderer: function (row, column, value) {
-                  return '<div style=\'margin:4px;margin-right: 4px\'>' + (value + 1) + '</div>';
+                text: '#',
+                sortable: false,
+                filterable: false,
+                editable: false,
+                groupable: false,
+                draggable: false,
+                resizable: false,
+                datafield: '',
+                columntype: 'number',
+                width: '5%',
+                cellsrenderer: function(row, column, value) {
+                  return (
+                    "<div style='margin:4px;margin-right: 4px'>" +
+                    (value + 1) +
+                    '</div>'
+                  );
                 }
               },
-              {text: 'From', datafield: 'FldFrom', width: '10%'},
-              {text: 'To', datafield: 'FldTo', width: '10%'},
-              {text: 'Arrival Date', datafield: 'FldArrivalDate', width: '10%', cellsformat: 'yyyy-MM-dd'},
-              {text: 'Dep Date', datafield: 'FldDepDate', width: '10%', cellsformat: 'yyyy-MM-dd'},
-              {text: 'Port Time', datafield: 'FldPortTime', width: '10%', cellsformat: 'yyyy-MM-dd'},
-              {text: 'Inland Time', datafield: 'FldInlandTime', width: '10%', cellsformat: 'yyyy-MM-dd'},
-              {text: 'Ocean', datafield: 'FldOcean', width: '10%'},
-              {text: 'Total', datafield: 'FldTotal', width: '10%'},
-              {text: 'Vessel', datafield: 'FldVessel', width: '15%'},
-
-
+              { text: 'From', datafield: 'FldFrom', width: '10%' },
+              { text: 'To', datafield: 'FldTo', width: '10%' },
+              {
+                text: 'Arrival Date',
+                datafield: 'FldArrivalDate',
+                width: '10%',
+                cellsformat: 'yyyy-MM-dd'
+              },
+              {
+                text: 'Dep Date',
+                datafield: 'FldDepDate',
+                width: '10%',
+                cellsformat: 'yyyy-MM-dd'
+              },
+              {
+                text: 'Port Time',
+                datafield: 'FldPortTime',
+                width: '10%',
+                cellsformat: 'yyyy-MM-dd'
+              },
+              {
+                text: 'Inland Time',
+                datafield: 'FldInlandTime',
+                width: '10%',
+                cellsformat: 'yyyy-MM-dd'
+              },
+              { text: 'Ocean', datafield: 'FldOcean', width: '10%' },
+              { text: 'Total', datafield: 'FldTotal', width: '10%' },
+              { text: 'Vessel', datafield: 'FldVessel', width: '15%' }
             ]
           });
+        }
+
+        // console.log(data);
+      },
+      err => {
+        console.log(err);
       }
-
-
-      // console.log(data);
-
-    }, err => {
-      console.log(err);
-    });
+    );
   }
 }
