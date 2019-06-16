@@ -30,7 +30,7 @@ export class HomeComponent implements OnInit {
     this.siteList = [
       {
         id: '1',
-        text: 'One-lind.com'
+        text: 'One-line.com'
       }
     ];
     this.options = {

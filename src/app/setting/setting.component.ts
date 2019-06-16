@@ -43,7 +43,9 @@ export class SettingComponent implements OnInit {
   ReportTime;
   masterEmailId;
   systemEmailId = -1;
-
+  comCode;
+  SubsidiaryId;
+  enableSite;
   constructor(private selectorService: SelectorService, private creatorService: CreatorService) {
     this.weekNumber = Array(7).fill(0).map((x, i) => i + 1);
     this.monthNumber = Array(30).fill(0).map((x, i) => i + 1);
@@ -89,6 +91,9 @@ export class SettingComponent implements OnInit {
         this.dayOfWeek = siteSetting['DayMounth'];
         this.dayLength = siteSetting['LenghtScrap'];
         this.scrapTime = siteSetting['Time'];
+        this.comCode = siteSetting['com_code'];
+        this.SubsidiaryId = siteSetting['Subsidiary_id'];
+        this.enableSite = siteSetting['DisableEnable'];
         this.loadPortToPort();
       } else {
         this.hasSetting = false;
@@ -134,6 +139,9 @@ export class SettingComponent implements OnInit {
     siteModel.TypeSchedule = this.scrapType;
     siteModel.DayOfMounth = this.setDayOf();
     siteModel.LenghtToScraping = this.dayLength;
+    siteModel.ComCode = this.comCode;
+    siteModel.SubsidiaryId = this.SubsidiaryId;
+    siteModel.DisableEnable = this.enableSite;
     this.creatorService.saveSetting(siteModel).subscribe(data => {
       alertify.success('Success');
     }, err => {
@@ -165,8 +173,6 @@ export class SettingComponent implements OnInit {
     if (this.scrapType === '3') {
       return `${time.getSeconds()} ${time.getMinutes()} ${time.getHours()} * ${this.dayOfMonth} *`;
     }
-
-
   }
 
   savePorttoPort() {

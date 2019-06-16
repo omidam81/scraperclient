@@ -6,6 +6,10 @@ export class SiteSetting {
   LenghtToScraping;
   ScheduleTime;
   String;
+  ComCode;
+  SubsidiaryId;
+  DisableEnable;
+
 }
 export class PortToPort{
   from;

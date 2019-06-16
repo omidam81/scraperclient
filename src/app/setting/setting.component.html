@@ -170,6 +170,25 @@
           <div class="col-12 col-spc-first" style="padding-right: 15px;padding-left: 18px;">
             <div class="form-row">
               <div class="col-md-5">
+                <label>
+                  Com Code
+                </label>
+                <input type="text" class="form-control" [(ngModel)]="comCode">
+              </div>
+              <div class="col-md-5">
+                <label>
+                  Subsidiary Id
+                </label>
+                <input type="text" class="form-control" [(ngModel)]="SubsidiaryId">
+              </div>
+            </div>
+            <div class="form-check">
+
+              <input type="checkbox" class="form-check-input" [(ngModel)]="enableSite">
+              <label class="form-check-label">Avtive</label>
+            </div>
+            <div class="form-row">
+              <div class="col-md-5">
                 <label>Period Time</label>
 
                 <select class="form-control mb-2" [(ngModel)]="scrapType" (change)="setDayValue($event)">
