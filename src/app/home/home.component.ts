@@ -81,19 +81,19 @@ export class HomeComponent implements OnInit {
             localdata: this.list,
             datafields: [
               { name: 'FldArrivalDate', type: 'date' },
-              { name: 'FldDepDate', type: 'date' },
-              { name: 'FldInlandTime', type: 'date' },
+              { name: 'etd', type: 'date' },
+              { name: 'eta', type: 'date' },
               { name: 'FldPortTime', type: 'date' },
               { name: 'FldFkFromPort', type: 'number' },
               { name: 'FldFkMasterRoute', type: 'number' },
               { name: 'FldPkRoute', type: 'number' },
               { name: 'FldFkToPort', type: 'number' },
               { name: 'FldFkFromPort', type: 'number' },
-              { name: 'FldFrom', type: 'string' },
-              { name: 'FldOcean', type: 'string' },
-              { name: 'FldTo', type: 'string' },
-              { name: 'FldTotal', type: 'string' },
-              { name: 'FldVessel', type: 'string' }
+              { name: 'from_port_name', type: 'string' },
+              { name: 'service', type: 'string' },
+              { name: 'to_port_name', type: 'string' },
+              { name: 'voyage', type: 'string' },
+              { name: 'vessel', type: 'string' }
             ],
             datatype: 'array'
           };
@@ -128,35 +128,24 @@ export class HomeComponent implements OnInit {
                   );
                 }
               },
-              { text: 'From', datafield: 'FldFrom', width: '10%' },
-              { text: 'To', datafield: 'FldTo', width: '10%' },
+              { text: 'From', datafield: 'from_port_name', width: '15%' },
+              { text: 'To', datafield: 'to_port_name', width: '15%' },
               {
                 text: 'Arrival Date',
-                datafield: 'FldArrivalDate',
-                width: '10%',
+                datafield: 'eta',
+                width: '15%',
                 cellsformat: 'yyyy-MM-dd'
               },
               {
-                text: 'Dep Date',
-                datafield: 'FldDepDate',
-                width: '10%',
+                text: 'Departure Date',
+                datafield: 'etd',
+                width: '15%',
                 cellsformat: 'yyyy-MM-dd'
               },
-              {
-                text: 'Port Time',
-                datafield: 'FldPortTime',
-                width: '10%',
-                cellsformat: 'yyyy-MM-dd'
-              },
-              {
-                text: 'Inland Time',
-                datafield: 'FldInlandTime',
-                width: '10%',
-                cellsformat: 'yyyy-MM-dd'
-              },
-              { text: 'Ocean', datafield: 'FldOcean', width: '10%' },
-              { text: 'Total', datafield: 'FldTotal', width: '10%' },
-              { text: 'Vessel', datafield: 'FldVessel', width: '15%' }
+
+              { text: 'service', datafield: 'service', width: '10%' },
+              { text: 'Vessel', datafield: 'vessel', width: '15%' },
+              { text: 'voyage', datafield: 'voyage', width: '10%' }
             ]
           });
         }

@@ -56,13 +56,10 @@ export class SettingComponent implements OnInit {
     this.option = {
       placeholder: 'Select Port...',
       width: '100%',
-
-
     };
     this.option2 = {
       placeholder: 'Select Port...',
       width: '100%'
-
     };
 
     this.selectorService.loadSites(-1).subscribe(data => {
@@ -241,7 +238,6 @@ export class SettingComponent implements OnInit {
     }, err => {
       alertify.error('error');
     });
-
     //save Config
     this.creatorService.saveSysyemEmail(this.emailSetting).subscribe(data => {
       try {
