@@ -73,7 +73,6 @@ export class HomeComponent implements OnInit {
 
     this.selectorService.loadScrapReport(this.scrapReport).subscribe(
       data => {
-        console.log(data);
         var datalist: any = data;
         if (datalist.msg === 'success') {
           this.list = datalist.data;
