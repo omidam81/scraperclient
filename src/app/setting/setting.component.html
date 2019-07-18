@@ -1,11 +1,18 @@
 <div class="col-md-10 offset-md-1 customBox">
-  <div><h4 class="requestTitle">Setting</h4></div>
+  <div>
+    <h4 class="requestTitle">Setting</h4>
+  </div>
   <div class="container mt-3">
     <br>
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" id="nav-tab" role="tablist">
       <li class="nav-item">
-        <a class="nav-link active" data-toggle="tab" href="#ScrapSetting">
+        <a class="nav-link active" data-toggle="tab" href="#portPaire">
+          generate port-paire
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#ScrapSetting">
           schedule Setting
         </a>
       </li>
@@ -18,7 +25,45 @@
 
     <!-- Tab panes -->
     <div class="tab-content">
-      <div id="ScrapSetting" class="container tab-pane active" style="min-height: 350px;"><br>
+      <div id="portPaire" class="container tab-pane active" style="min-height: 350px;"><br>
+        <table class="table table-striped" [mfData]="filterList2" #first="mfDataTable" [mfRowsOnPage]="5">
+          <thead>
+            <tr>
+              <th style="width: 40%">
+                <input placeholder="Port Name ..." type="text" class='form-control' (keyup)="searchNew($event)">
+                <br>
+                <mfDefaultSorter by="text">Port</mfDefaultSorter>
+              </th>
+              <th style="width: 20%">
+                <mfDefaultSorter by="text">Generate</mfDefaultSorter>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr mdbTableCol *ngFor="let port of first.data">
+              <td>
+                <p>{{port.text}}</p>
+              </td>
+              <td>
+                <a style='background-color: #d41872;border-color:#d41872 ' class='btn btn-sm'
+                  (click)="showGenerateModal(port.id,port.text)">
+                  <span style='color: white'>Generate</span>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="4">
+                <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+
+
+      </div>
+      <div id="ScrapSetting" class="container tab-pane" style="min-height: 350px;"><br>
         <div class="row">
           <div class="col table-around">
             <div class="input-group mb-3">
@@ -28,26 +73,26 @@
                 </span>
               </div>
               <input type="text" class="form-control" placeholder="Search Site" aria-label="Username"
-                     aria-describedby="basic-addon1" [(ngModel)]="searchString">
+                aria-describedby="basic-addon1" [(ngModel)]="searchString">
             </div>
 
             <table class="table">
               <thead>
-              <tr>
-                <th>Site</th>
-                <th>Command</th>
+                <tr>
+                  <th>Site</th>
+                  <th>Command</th>
 
-              </tr>
+                </tr>
               </thead>
               <tbody>
-              <tr mdbTableCol *ngFor="let site of siteList| filter : 'FldName' : searchString; let i = index">
-                <td>{{site.FldName}}</td>
-                <td>
-                  <a (click)="showModal(site.FldPkSite)">
-                    <i class="fa fa-edit text-primary" style="margin-left: 20px"></i>
-                  </a>
-                </td>
-              </tr>
+                <tr mdbTableCol *ngFor="let site of siteList| filter : 'FldName' : searchString; let i = index">
+                  <td>{{site.FldName}}</td>
+                  <td>
+                    <a (click)="showModal(site.FldPkSite)">
+                      <i class="fa fa-edit text-primary" style="margin-left: 20px"></i>
+                    </a>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -88,7 +133,7 @@
               Send Time:
             </label>
             <input class="form-control" [owlDateTime]="dt2" [owlDateTimeTrigger]="dt2" placeholder="Date Time"
-                   [(ngModel)]="ReportTime">
+              [(ngModel)]="ReportTime">
             <owl-date-time [pickerType]="'timer'" #dt2></owl-date-time>
 
           </div>
@@ -127,21 +172,21 @@
               <div class="card-body">
                 <table class="table">
                   <thead>
-                  <tr>
-                    <th>Email</th>
-                    <th>Command</th>
+                    <tr>
+                      <th>Email</th>
+                      <th>Command</th>
 
-                  </tr>
+                    </tr>
                   </thead>
                   <tbody>
-                  <tr mdbTableCol *ngFor="let email of emailList">
-                    <td>{{email.FldEmail}}</td>
-                    <td>
-                      <a (click)="deleteEmail(email.FldPkEmail)">
-                        <i class="fa fa-remove" style="margin-left: 20px;color: #d41872"></i>
-                      </a>
-                    </td>
-                  </tr>
+                    <tr mdbTableCol *ngFor="let email of emailList">
+                      <td>{{email.FldEmail}}</td>
+                      <td>
+                        <a (click)="deleteEmail(email.FldPkEmail)">
+                          <i class="fa fa-remove" style="margin-left: 20px;color: #d41872"></i>
+                        </a>
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -227,7 +272,7 @@
               <div class="col-md-5">
                 <label>Scrap Time</label>
                 <input class="form-control" [owlDateTime]="dt1" [owlDateTimeTrigger]="dt1" placeholder="Date Time"
-                       [(ngModel)]="scrapTime">
+                  [(ngModel)]="scrapTime">
                 <owl-date-time [pickerType]="'timer'" #dt1></owl-date-time>
               </div>
               <div class="col-md-1"></div>
@@ -250,7 +295,7 @@
             <div class="col-md-5">
               <label>From Port:</label>
               <select2 value="selectedSite" [data]="portList" [options]="option" [cssImport]="true"
-                       (valueChanged)="changedOrigin($event)"></select2>
+                (valueChanged)="changedOrigin($event)"></select2>
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-5">
@@ -258,13 +303,13 @@
                 To Port:
               </label>
               <select2 value="selectedSite" [data]="portList" [options]="option2" [cssImport]="true"
-                       (valueChanged)="changedDestination($event)"></select2>
+                (valueChanged)="changedDestination($event)"></select2>
             </div>
 
             <div class="col-md-4">
               <label> </label>
               <button class="btn btn-primary mt-4 btn-sm" (click)="savePorttoPort()"><i class="fa fa-plus">&#160;
-                Add</i></button>
+                  Add</i></button>
             </div>
           </div>
         </div>
@@ -282,41 +327,41 @@
                 </span>
               </div>
               <input type="text" class="form-control" placeholder="Origin OR Destination Port"
-                     (input)="searchPort($event)">
+                (input)="searchPort($event)">
             </div>
             <table class="table table-striped" [mfData]="filterList" #mf="mfDataTable" [mfRowsOnPage]="5">
               <thead>
-              <tr>
-                <th style="width: 40%">
-                  <mfDefaultSorter by="text">From</mfDefaultSorter>
-                </th>
-                <th style="width: 40%">
-                  <mfDefaultSorter by="text">To</mfDefaultSorter>
-                </th>
-                <th style="width: 20%">
-                  <mfDefaultSorter by="text">Command</mfDefaultSorter>
-                </th>
-              </tr>
+                <tr>
+                  <th style="width: 40%">
+                    <mfDefaultSorter by="text">From</mfDefaultSorter>
+                  </th>
+                  <th style="width: 40%">
+                    <mfDefaultSorter by="text">To</mfDefaultSorter>
+                  </th>
+                  <th style="width: 20%">
+                    <mfDefaultSorter by="text">Command</mfDefaultSorter>
+                  </th>
+                </tr>
               </thead>
               <tbody>
-              <tr mdbTableCol *ngFor="let port of mf.data">
-                <td>
-                  <p>{{port.fromPortname}}</p>
-                </td>
-                <td>{{port.toPortname}}</td>
-                <td>
-                  <a (click)="RemovePortToPort(port.FldPkDetailsSetting)">
-                    <i class="fa fa-remove " style="margin-left: 20px;color: #d41872"></i>
-                  </a>
-                </td>
-              </tr>
+                <tr mdbTableCol *ngFor="let port of mf.data">
+                  <td>
+                    <p>{{port.fromPortname}}</p>
+                  </td>
+                  <td>{{port.toPortname}}</td>
+                  <td>
+                    <a (click)="RemovePortToPort(port.FldPkDetailsSetting)">
+                      <i class="fa fa-remove " style="margin-left: 20px;color: #d41872"></i>
+                    </a>
+                  </td>
+                </tr>
               </tbody>
               <tfoot>
-              <tr>
-                <td colspan="4">
-                  <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
-                </td>
-              </tr>
+                <tr>
+                  <td colspan="4">
+                    <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
+                  </td>
+                </tr>
               </tfoot>
             </table>
           </div>
@@ -326,6 +371,59 @@
 
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="generateModal" class="modal" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        Generate Port Pair for {{selectedPortName}}
+      </div>
+      <div class="modal-body">
+        <input placeholder="Port Name ..." type="text" class='form-control'  (keyup)="searchAll($event)">
+        <br>
+        <table class="table table-bordered" [mfData]="filterListAll" #all="mfDataTable"  [mfRowsOnPage]="5">
+          <thead>
+            <tr>
+              <th style="width: 40%">
+                <mfDefaultSorter by="text">Port</mfDefaultSorter>
+              </th>
+              <th style="width: 20%">
+                <input id='checkAll' type="checkbox" (click)='selectAll()'>
+
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr mdbTableCol *ngFor="let port of all.data">
+              <td>
+                <p>{{port.text}}</p>
+              </td>
+              <td>
+                <input id={{port.id}} type='checkbox' class='myCheckBox' (click)='addtoAssign(port.id)'>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="4">
+                <mfBootstrapPaginator (click)='onPageChange()' [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+        <br>
+        <div class='text-center'>
+          <button (click)='generatePortPaire()' style='color:white; background-color: #d41872;border-color:#d41872 ' class='btn'>
+            Save
+          </button>
+        </div>
+
+      </div>
+
     </div>
   </div>
 </div>

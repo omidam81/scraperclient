@@ -1,10 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {Select2OptionData} from 'ng2-select2';
-import {SelectorService} from '../_services/selector.service';
-import {SiteSetting, PortToPort, SystemEmail} from '../model/setting';
-import {CreatorService} from '../_services/creator.service';
-import {subscribeTo} from 'rxjs/internal-compatibility';
-import {promise} from 'selenium-webdriver';
+import { Component, OnInit } from '@angular/core';
+import { Select2OptionData } from 'ng2-select2';
+import { SelectorService } from '../_services/selector.service';
+import { SiteSetting, PortToPort, SystemEmail } from '../model/setting';
+import { CreatorService } from '../_services/creator.service';
+import { Router } from '@angular/router';
 
 
 declare const $: any;
@@ -46,7 +45,16 @@ export class SettingComponent implements OnInit {
   comCode;
   SubsidiaryId;
   enableSite;
-  constructor(private selectorService: SelectorService, private creatorService: CreatorService) {
+  newPorts = [];
+  allports;
+  selectedPortName;
+  selectedPort;
+  filternewPorts;
+  filterListAll;
+  filterList2;
+  forAssign = [];
+  allchecked = false;
+  constructor(private selectorService: SelectorService, private creatorService: CreatorService, private router: Router) {
     this.weekNumber = Array(7).fill(0).map((x, i) => i + 1);
     this.monthNumber = Array(30).fill(0).map((x, i) => i + 1);
     this.emailSetting = new SystemEmail();
@@ -73,9 +81,25 @@ export class SettingComponent implements OnInit {
     await this.loadMasterEmailSetting();
     this.loadEmailSetting();
     this.loadEmailList();
+    this.loadNewPorts();
 
   }
+  loadNewPorts() {
+    this.selectorService.loadPorts(-1).subscribe(ports => {
+      this.allports = ports['data'];
+      this.filterListAll = JSON.parse(JSON.stringify(ports['data']));
+      this.selectorService.loadPortToPort(1).subscribe(data => {
+        let old = data['data'];
+        this.newPorts = this.getNewPorts(this.allports, old);
+        this.filterList2 = JSON.parse(JSON.stringify(this.newPorts));
+      }, err => {
+        alertify.error('error');
+      })
+    }, err => {
+      alertify.error('error');
+    });
 
+  }
   showModal(id) {
     this.listOfPortForSave = [];
     $('#settingSiteModal').modal('show');
@@ -177,16 +201,8 @@ export class SettingComponent implements OnInit {
     portToPort.from = this.origin;
     portToPort.to = this.destination;
     portToPort.siteId = this.selectedSite;
-    this.creatorService.savePortToPort(portToPort).subscribe(data => {
-      if (data['data'][0]) {
-        alertify.success('success');
-        this.loadPortToPort();
-      } else {
-        alertify.error('error');
-      }
-    }, err => {
-      alertify.error('error');
-    });
+    this.creatorService.savePortToPort(portToPort);
+    alertify.success('success');
   }
 
   loadPortToPort() {
@@ -209,7 +225,7 @@ export class SettingComponent implements OnInit {
   RemovePortToPort(id) {
     this.creatorService.deletePortToPort(id).subscribe(data => {
       alertify.success('success');
-          this.loadPortToPort();
+      this.loadPortToPort();
     }, err => {
       alertify.error('error');
     });
@@ -306,5 +322,99 @@ export class SettingComponent implements OnInit {
     }, err => {
       alertify.error('error');
     });
+  }
+  getNewPorts(all, old) {
+    let temp = JSON.parse(JSON.stringify(all));
+    let p1 = old.map(x => x.fromPortcode);
+    let p2 = old.map(x => x.toPortcode);
+    for (let port of p1) {
+      for (let i = 0; i < temp.length; i++) {
+        if (temp[i]['id'] === port) {
+          temp.splice(i, 1)
+        }
+      }
+    }
+    for (let port of p2) {
+      for (let i = 0; i < temp.length; i++) {
+        if (temp[i]['id'] === port) {
+          temp.splice(i, 1)
+        }
+      }
+    }
+    return temp;
+  }
+  showGenerateModal(id, name) {
+    this.selectedPort = id;
+    this.selectedPortName = name;
+    ($("#generateModal") as any).modal('show');
+  }
+  searchNew(e) {
+    let text = e.target.value;
+    this.filterList2 = this.newPorts.filter(x => x.text.toLowerCase().includes(text.toLowerCase()));
+  }
+  searchAll(e) {
+    let text = e.target.value;
+    this.filterListAll = this.allports.filter(x => x.text.toLowerCase().includes(text.toLowerCase()));
+  }
+  selectAll() {
+    this.allchecked = !this.allchecked;
+    if (this.allchecked) {
+      for (let port of this.allports) {
+        this.forAssign.push(port.id);
+      }
+      $(".myCheckBox").prop('checked', true);
+    } else {
+      this.forAssign = [];
+      $(".myCheckBox").prop('checked', false);
+    }
+
+  }
+  addtoAssign(id) {
+    let index = this.forAssign.indexOf(id)
+    if (index === -1) {
+      this.forAssign.push(id);
+    } else {
+      this.forAssign.splice(index, 1);
+    }
+  }
+  onPageChange() {
+    setTimeout(() => {
+      let items = $(".myCheckBox");
+      for (let item of items) {
+        let index = this.forAssign.find(x => x === item.id);
+        if (index) {
+          $(item).prop('checked', true);
+        } else {
+          $(item).prop('checked', false);
+        }
+      }
+    }, 0);
+  }
+  generatePortPaire() {
+    for(let port of this.forAssign){
+      let portToPort = new PortToPort();
+      portToPort.from = this.selectedPort;
+      portToPort.to = port;
+      portToPort.siteId = 1;
+      this.creatorService.savePortToPort(portToPort);
+    }
+    alertify.success('success');
+    this.forAssign = [];
+    $(".myCheckBox").prop('checked', false);
+    ($("#generateModal") as any).modal('hide');
+    this.onRefresh();
+  }
+  onRefresh() {
+    this.router.routeReuseStrategy.shouldReuseRoute = function () {
+      return false;
+    };
+
+    let currentUrl = this.router.url + '?';
+
+    this.router.navigateByUrl(currentUrl)
+      .then(() => {
+        this.router.navigated = false;
+        this.router.navigate([this.router.url]);
+      });
   }
 }

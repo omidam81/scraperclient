@@ -31,8 +31,8 @@ export class CreatorService {
     return this.http.post(this.global.url + 'api/user/register', colone);
   }
 
-  savePortToPort(PortToPort) {
-    return this.http.post(this.global.url + 'api/scrap/savePortToPort', PortToPort);
+  async  savePortToPort(PortToPort) {
+    return await  this.http.post(this.global.url + 'api/scrap/savePortToPort', PortToPort).toPromise();
   }
 
   saveSetting(settingOData) {
