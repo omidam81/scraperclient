@@ -72,4 +72,10 @@ export class SelectorService {
   loadScrapReport(ScrapOData) {
     return this.http.post(this.global.url + 'api/scrap/scrapReport', ScrapOData);
   }
+  getLastPorts(){
+    return this.http.get(this.global.url + 'api/scrap/getNewPort');
+  }
+  getLastRouts(){
+    return this.http.get(this.global.url + 'api/scrap/getNewRout');
+  }
 }

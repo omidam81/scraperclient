@@ -27,6 +27,16 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.selectorService.getLastPorts().subscribe(
+      data => {
+      },
+      err => {}
+    );
+    this.selectorService.getLastRouts().subscribe(
+      data => {
+      },
+      err => {}
+    );
     this.siteList = [
       {
         id: '1',
