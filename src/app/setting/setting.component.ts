@@ -181,7 +181,8 @@ export class SettingComponent implements OnInit {
     }
   }
 
-  convertToSchduleFormat(time: Date, type = 1) {
+  convertToSchduleFormat(atime: Date, type = 1) {
+    let time = new Date(atime);
     if (type = 2) {
       return `${time.getSeconds()} ${time.getMinutes()} ${time.getHours()} * * *`;
     }
@@ -271,12 +272,14 @@ export class SettingComponent implements OnInit {
 
   loadEmailSetting() {
     this.creatorService.loadSystemEmail(-1).subscribe(data => {
-      this.emailSetting.password = data['data'][0]['FldPass'];
-      this.emailSetting.username = data['data'][0]['FldUserName'];
-      this.emailSetting.email = data['data'][0]['FldEmail'];
+      if(data['data'][0]){
+      this.emailSetting.password = data['data'][0]['FldPass']? data['data'][0]['FldPass'].trim():'';
+      this.emailSetting.username = data['data'][0]['FldUserName']? data['data'][0]['FldUserName'].trim():'';
+      this.emailSetting.email = data['data'][0]['FldEmail']? data['data'][0]['FldEmail'].trim():'';
       this.emailSetting.port = data['data'][0]['FldPort'];
-      this.emailSetting.server = data['data'][0]['FldServer'];
+      this.emailSetting.server = data['data'][0]['FldServer']? data['data'][0]['FldServer'].trim():'';
       this.systemEmailId = data['data'][0]['FldPkSystemEmail'];
+    }
     }, err => {
       console.log('error fetching data');
     });
