@@ -109,7 +109,8 @@ export class SettingComponent implements OnInit {
         let siteSetting = data['data'][0];
         this.hasSetting = true;
         this.scrapType = siteSetting['Schedule'].toString();
-        this.dayOfWeek = siteSetting['DayMounth'];
+        this.dayOfWeek = `${siteSetting['DayMounth']}`;
+        this.dayOfMonth = `${siteSetting['DayMounth']}`;
         this.dayLength = siteSetting['LenghtScrap'];
         this.scrapTime = siteSetting['Time'];
         this.comCode = siteSetting['com_code'];
@@ -183,9 +184,9 @@ export class SettingComponent implements OnInit {
 
   convertToSchduleFormat(atime: Date, type = 1) {
     let time = new Date(atime);
-    if (type = 2) {
-      return `${time.getSeconds()} ${time.getMinutes()} ${time.getHours()} * * *`;
-    }
+    // if (type = 2) {
+    //   return `${time.getSeconds()} ${time.getMinutes()} ${time.getHours()} * * *`;
+    // }
     if (this.scrapType === '1') {
       return `${time.getSeconds()} ${time.getMinutes()} ${time.getHours()} * * *`;
     }
