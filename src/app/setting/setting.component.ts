@@ -184,9 +184,9 @@ export class SettingComponent implements OnInit {
 
   convertToSchduleFormat(atime: Date, type = 1) {
     let time = new Date(atime);
-    // if (type = 2) {
-    //   return `${time.getSeconds()} ${time.getMinutes()} ${time.getHours()} * * *`;
-    // }
+    if (type === 2) {
+      return `${time.getSeconds()} ${time.getMinutes()} ${time.getHours()} * * *`;
+    }
     if (this.scrapType === '1') {
       return `${time.getSeconds()} ${time.getMinutes()} ${time.getHours()} * * *`;
     }
@@ -287,7 +287,7 @@ export class SettingComponent implements OnInit {
   }
 
   addEmailToList() {
-    this.creatorService.addEmail(this.masterEmailId, this.email).subscribe(data => {
+    this.creatorService.addEmail(1, this.email).subscribe(data => {
 
       alertify.success('success');
       this.loadEmailList();
