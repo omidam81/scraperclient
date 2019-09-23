@@ -42,11 +42,11 @@
           <tbody>
             <tr mdbTableCol *ngFor="let port of first.data">
               <td>
-                <p>{{port.text}}</p>
+                <p>{{port.port_name}}</p>
               </td>
               <td>
                 <a style='background-color: #d41872;border-color:#d41872 ' class='btn btn-sm'
-                  (click)="showGenerateModal(port.id,port.text)">
+                  (click)="showGenerateModal(port.port_id,port.port_name)">
                   <span style='color: white'>Generate</span>
                 </a>
               </td>
@@ -318,33 +318,25 @@
         <hr>
         <div *ngIf="hasSetting" class="row mt-3">
           <div class="col col-spc-first">
-
-
             <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text">
-                  <i class="fa fa-search"></i>
-                </span>
-              </div>
-              <input type="text" class="form-control" placeholder="Origin OR Destination Port"
-                (input)="searchPort($event)">
+
             </div>
-            <table class="table table-striped" [mfData]="filterList" #mf="mfDataTable" [mfRowsOnPage]="5">
+            <table class="table table-striped">
               <thead>
                 <tr>
                   <th style="width: 40%">
-                    <mfDefaultSorter by="text">From</mfDefaultSorter>
+                    From
                   </th>
                   <th style="width: 40%">
-                    <mfDefaultSorter by="text">To</mfDefaultSorter>
+                    To
                   </th>
                   <th style="width: 20%">
-                    <mfDefaultSorter by="text">Command</mfDefaultSorter>
-                  </th>
+                    Command                
+                    </th>
                 </tr>
               </thead>
               <tbody>
-                <tr mdbTableCol *ngFor="let port of mf.data">
+                <tr *ngFor="let port of portToPortList">
                   <td>
                     <p>{{port.fromPortname}}</p>
                   </td>
@@ -357,11 +349,12 @@
                 </tr>
               </tbody>
               <tfoot>
-                <tr>
-                  <td colspan="4">
-                    <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
-                  </td>
-                </tr>
+                <button (click)='pre()' class='btn btn-primary' *ngIf='minRow !== 1'>
+                  pre
+                </button>
+                <button (click)='next()' class='btn btn-primary'>
+                  next
+                </button>
               </tfoot>
             </table>
           </div>

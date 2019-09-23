@@ -78,4 +78,13 @@ export class SelectorService {
   getLastRouts(){
     return this.http.get(this.global.url + 'api/scrap/getNewRout');
   }
+  getNew(){
+    return this.http.get(this.global.url + 'api/scrap/loadNewPorts');
+  }
+  getPortPairPaging(id){
+    let data ={
+      id:id
+    }
+    return this.http.post(this.global.url + 'api/scrap/portPairPaging',data);
+  }
 }

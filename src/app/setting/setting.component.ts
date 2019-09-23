@@ -54,6 +54,8 @@ export class SettingComponent implements OnInit {
   filterList2;
   forAssign = [];
   allchecked = false;
+  minRow = 1;
+  maxRow = 10;
   constructor(private selectorService: SelectorService, private creatorService: CreatorService, private router: Router) {
     this.weekNumber = Array(7).fill(0).map((x, i) => i + 1);
     this.monthNumber = Array(30).fill(0).map((x, i) => i + 1);
@@ -85,20 +87,29 @@ export class SettingComponent implements OnInit {
 
   }
   loadNewPorts() {
-    this.selectorService.loadPorts(-1).subscribe(ports => {
-      this.allports = ports['data'];
-      this.filterListAll = JSON.parse(JSON.stringify(ports['data']));
-      this.selectorService.loadPortToPort(1).subscribe(data => {
-        let old = data['data'];
-        this.newPorts = this.getNewPorts(this.allports, old);
-        this.filterList2 = JSON.parse(JSON.stringify(this.newPorts));
-      }, err => {
-        alertify.error('error');
-      })
-    }, err => {
-      alertify.error('error');
-    });
+    // this.selectorService.loadPorts(-1).subscribe(ports => {
+    //   this.allports = ports['data'];
+    //   this.filterListAll = JSON.parse(JSON.stringify(ports['data']));
+    //   this.selectorService.loadPortToPort(1).subscribe(data => {
+    //     let old = data['data'];
+    //     this.newPorts = this.getNewPorts(this.allports, old);
+    //     this.filterList2 = JSON.parse(JSON.stringify(this.newPorts));
+    //   }, err => {
+    //     alertify.error('error');
+    //   })
+    // }, err => {
+    //   alertify.error('error');
+    // });
+    this.selectorService.loadPorts(-1).subscribe(data=>{
+      this.allports = data['data'];
+      this.filterListAll = JSON.parse(JSON.stringify(data['data']));
+    },err=>{
 
+    })
+    this.selectorService.getNew().subscribe(data=>{
+      this.newPorts = data['data'];
+      this.filterList2 = JSON.parse(JSON.stringify(data['data']));
+    })
   }
   showModal(id) {
     this.listOfPortForSave = [];
@@ -116,9 +127,17 @@ export class SettingComponent implements OnInit {
         this.comCode = siteSetting['com_code'];
         this.SubsidiaryId = siteSetting['Subsidiary_id'];
         this.enableSite = siteSetting['DisableEnable'];
-        this.loadPortToPort();
+         this.loadPortToPort();
       } else {
         this.hasSetting = false;
+        this.scrapType = null;
+        this.dayOfWeek = null;
+        this.dayOfMonth = null;
+        this.dayLength = null;
+        this.scrapTime = null;
+        this.comCode =null;
+        this.SubsidiaryId = null;
+        this.enableSite = null;
       }
     }, err => {
 
@@ -194,7 +213,7 @@ export class SettingComponent implements OnInit {
       return `${time.getSeconds()} ${time.getMinutes()} ${time.getHours()} * * ${this.dayOfWeek}`;
     }
     if (this.scrapType === '3') {
-      return `${time.getSeconds()} ${time.getMinutes()} ${time.getHours()} * ${this.dayOfMonth} *`;
+      return `${time.getSeconds()} ${time.getMinutes()} ${time.getHours()} ${this.dayOfMonth} * *`;
     }
   }
 
@@ -208,7 +227,7 @@ export class SettingComponent implements OnInit {
   }
 
   loadPortToPort() {
-    this.selectorService.loadPortToPort(this.selectedSite).subscribe(data => {
+    this.selectorService.getPortPairPaging(-1).subscribe(data => {
       this.portToPortList = data['data'];
       this.filterList = JSON.parse(JSON.stringify(data['data']));
     }, err => {
@@ -420,5 +439,13 @@ export class SettingComponent implements OnInit {
         this.router.navigated = false;
         this.router.navigate([this.router.url]);
       });
+  }
+  next(){
+    this.minRow += 10 ;
+    this.maxRow += 10 ;
+  }
+  pre(){
+    this.minRow -= 10 ;
+    this.maxRow -= 10 ;
   }
 }
