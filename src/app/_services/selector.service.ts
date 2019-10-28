@@ -87,4 +87,7 @@ export class SelectorService {
     }
     return this.http.post(this.global.url + 'api/scrap/portPairPaging',data);
   }
+  getServicesStatus(){
+    return this.http.get(this.global.url + 'api/checkServices');
+  }
 }

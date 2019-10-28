@@ -21,21 +21,23 @@ export class HomeComponent implements OnInit {
   public selectedSite;
   scrapReport: ScrapReport;
   list: any = [];
-
+  Status;
+  myInterval;
   constructor(private selectorService: SelectorService) {
     this.scrapReport = new ScrapReport();
   }
 
   ngOnInit() {
+    this.checkStatus();
     this.selectorService.getLastPorts().subscribe(
       data => {
       },
-      err => {}
+      err => { }
     );
     this.selectorService.getLastRouts().subscribe(
       data => {
       },
-      err => {}
+      err => { }
     );
     this.siteList = [
       {
@@ -59,7 +61,7 @@ export class HomeComponent implements OnInit {
       data => {
         this.portList = data['data'];
       },
-      err => {}
+      err => { }
     );
   }
 
@@ -116,7 +118,7 @@ export class HomeComponent implements OnInit {
             pagermode: 'simple',
             autoheight: true,
             columnsresize: true,
-            ready: function() {},
+            ready: function () { },
             columns: [
               {
                 text: '#',
@@ -129,7 +131,7 @@ export class HomeComponent implements OnInit {
                 datafield: '',
                 columntype: 'number',
                 width: '5%',
-                cellsrenderer: function(row, column, value) {
+                cellsrenderer: function (row, column, value) {
                   return (
                     "<div style='margin:4px;margin-right: 4px'>" +
                     (value + 1) +
@@ -165,5 +167,18 @@ export class HomeComponent implements OnInit {
         console.log(err);
       }
     );
+  }
+  checkStatus() {
+    this.myInterval = setInterval(() => {
+      this.selectorService.getServicesStatus().subscribe(data => {
+        this.Status = data['result'];
+        // this.Status.forEach((x)=>{
+        //   x.persent = Math.round(((x.count) / 5000) * 100);
+        // })
+      }, err => {
+        console.log(err);
+      })
+    }, 3000)
+
   }
 }
