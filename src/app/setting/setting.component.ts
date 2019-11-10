@@ -56,6 +56,7 @@ export class SettingComponent implements OnInit {
   allchecked = false;
   minRow = 1;
   maxRow = 10;
+  breakTime = 0;
   constructor(private selectorService: SelectorService, private creatorService: CreatorService, private router: Router) {
     this.weekNumber = Array(7).fill(0).map((x, i) => i + 1);
     this.monthNumber = Array(30).fill(0).map((x, i) => i + 1);
@@ -127,6 +128,7 @@ export class SettingComponent implements OnInit {
         this.comCode = siteSetting['com_code'];
         this.SubsidiaryId = siteSetting['Subsidiary_id'];
         this.enableSite = siteSetting['DisableEnable'];
+        this.breakTime = siteSetting['FldbreakTime'];
          this.loadPortToPort();
       } else {
         this.hasSetting = false;
@@ -183,6 +185,7 @@ export class SettingComponent implements OnInit {
     siteModel.ComCode = this.comCode;
     siteModel.SubsidiaryId = this.SubsidiaryId;
     siteModel.DisableEnable = this.enableSite;
+    siteModel.breakTime = this.breakTime;
     this.creatorService.saveSetting(siteModel).subscribe(data => {
       alertify.success('Success');
     }, err => {

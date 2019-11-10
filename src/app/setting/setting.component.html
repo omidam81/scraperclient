@@ -282,6 +282,13 @@
                 </label>
                 <input class="form-control" [(ngModel)]="dayLength">
               </div>
+              <div class="col-md-5 mt-2">
+                <label>
+                  Break Time (ms)
+                  <i data-toggle="tooltip" title="the break time between two request" class='fa fa-info'></i>
+                </label>
+                <input class="form-control" [(ngModel)]="breakTime">
+              </div>
             </div>
             <button type="button" class="btn btn-primary mt-3" (click)="saveScrapSetting()">Save changes</button>
           </div>

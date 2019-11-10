@@ -9,6 +9,7 @@ export class SiteSetting {
   ComCode;
   SubsidiaryId;
   DisableEnable;
+  breakTime;
 
 }
 export class PortToPort{
