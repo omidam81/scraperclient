@@ -23,6 +23,7 @@ export class HomeComponent implements OnInit {
   list: any = [];
   Status;
   myInterval;
+  messages = [];
   constructor(private selectorService: SelectorService) {
     this.scrapReport = new ScrapReport();
   }
@@ -172,13 +173,47 @@ export class HomeComponent implements OnInit {
     this.myInterval = setInterval(() => {
       this.selectorService.getServicesStatus().subscribe(data => {
         this.Status = data['result'];
-        // this.Status.forEach((x)=>{
-        //   x.persent = Math.round(((x.count) / 5000) * 100);
-        // })
+        for (let s of this.Status) {
+          if (s.err) {
+            this.messages.push({
+              msg: `Service ${s.name} has problem please pause Service and check your connection to ${s.name} site`,
+              see: false
+            }
+            );
+          }
+        }
+
       }, err => {
         console.log(err);
       })
     }, 3000)
 
+  }
+  forceStop(name, isPause) {
+    alertify.confirm('Pause Service', `Are you sure for ${isPause ? 'start' : 'stop'} ${name} Scrap`, () => {
+      let siteOData = {
+        site: name
+      }
+      this.selectorService.forceStop(siteOData).subscribe((data) => {
+
+      }, (err) => {
+
+      })
+    }, () => {
+      alertify.error('Cancel')
+    });
+  }
+  checkMessage(index) {
+    this.messages[index]['see'] = true;
+  }
+  toggleLog(name) {
+    let siteOData = {
+      site: name
+    }
+    this.selectorService.showLog(siteOData).subscribe((data) => {
+
+    }, (err) => {
+
+    })
   }
 }

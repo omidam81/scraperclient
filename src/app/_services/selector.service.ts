@@ -90,4 +90,10 @@ export class SelectorService {
   getServicesStatus(){
     return this.http.get(this.global.url + 'api/checkServices');
   }
+  forceStop(ScrapOData){
+    return this.http.post(this.global.url + 'api/scrap/toggle', ScrapOData);
+  }
+  showLog(ScrapOData){
+    return this.http.post(this.global.url + 'api/scrap/toggleLog', ScrapOData);
+  }
 }

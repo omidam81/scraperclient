@@ -3,12 +3,39 @@
     <h4>Services Status</h4>
     <hr>
     <div>
+      <div class="row">
+        <div class="col-12">
+          <div style="height: 200px;overflow-y: scroll;" class="card">
+            <div class="card-head text-center">
+              Error Messages
+            </div>
+            <div class="card-body">
+              <div class="row" *ngFor='let message of messages;let i = index'>
+                <div class="col-md-2">
+                  <button class="btn btn-primary btn-sm" (click)='checkMessage(i)'>
+                    i see this
+                  </button>
+                </div>
+                <div class="col-md-10">
+                  <p [class]='message.see ? "through" : ""'>
+                    {{message.msg}}
+                  </p>
+                </div>
+                <hr>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <table class='table'>
         <thead>
           <tr>
             <td class='text-center'>Service</td>
             <td class='text-center'>Status</td>
             <td class='text-center'>Last Scrap Count</td>
+            <td class="text-center">Pause/Play</td>
+            <td class="text-center">Show Log</td>
             <!-- <td>Progress Bar</td> -->
           </tr>
         </thead>
@@ -20,6 +47,17 @@
               <label *ngIf='item.service' class='badge badge-success'>Start</label>
             </td>
             <td class='text-center'>{{item.count}}</td>
+            <td class="text-center">
+              <button [class]="item.pause ? 'btn btn-success':'btn btn-danger'" (click)='forceStop(item.name,item.pause)'
+                [disabled]='!item.service'>
+                {{item.pause ? 'Start' : 'Pause'}}
+              </button>
+            </td>
+            <td class="text-center">
+              <button class="btn btn-primary btn-sm" [disabled]='!item.service' (click)='toggleLog(item.name)'>
+                {{item.showLog ? 'hide' : 'show'}}
+              </button>
+            </td>
             <!-- <td>
                 <div class="progress">
                     <div class="progress-bar" role="progressbar" [ngStyle]="{'width': (item.persent)+'%'}">{{item.persent}}%</div>
